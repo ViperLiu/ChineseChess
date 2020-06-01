@@ -118,6 +118,9 @@ namespace ChineseChess.Presenters
 
         internal void OnChessboardClicked(int x, int y)
         {
+            if (_battleField == null)
+                return;
+
             if (_battleField.GamePhase.CurrentPhase != GamePhase.Phase.WaitingForMove)
                 return;
             
