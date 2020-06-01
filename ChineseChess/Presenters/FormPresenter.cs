@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -151,6 +151,7 @@ namespace ChineseChess.Presenters
             _form.ConnectToServerBtn.Enabled = true;
             _form.URL.Enabled = true;
             _form.NickName.Enabled = true;
+            _form.SendChatBtn.Enabled = false;
             DisplayMsg("[WebSocket] 伺服器已關閉");
         }
 
