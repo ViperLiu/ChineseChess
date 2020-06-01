@@ -237,6 +237,7 @@ namespace ChineseChess.Presenters
             }
             _form.StartStopServerBtn.Enabled = false;
             _form.URL.Enabled = false;
+            _form.SendChatBtn.Enabled = true;
             //PlaceButtons();
         }
 
