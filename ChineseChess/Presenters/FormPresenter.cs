@@ -118,6 +118,9 @@ namespace ChineseChess.Presenters
 
         internal void OnChessboardClicked(int x, int y)
         {
+            if (_battleField == null)
+                return;
+
             if (_battleField.GamePhase.CurrentPhase != GamePhase.Phase.WaitingForMove)
                 return;
             
@@ -148,6 +151,7 @@ namespace ChineseChess.Presenters
             _form.ConnectToServerBtn.Enabled = true;
             _form.URL.Enabled = true;
             _form.NickName.Enabled = true;
+            _form.SendChatBtn.Enabled = false;
             DisplayMsg("[WebSocket] 伺服器已關閉");
         }
 
@@ -186,6 +190,7 @@ namespace ChineseChess.Presenters
             _form.ConnectToServerBtn.Enabled = false;
             _form.URL.Enabled = false;
             _form.NickName.Enabled = false;
+            _form.SendChatBtn.Enabled = true;
             DisplayMsg("[WebSocket] 已啟動伺服器");
             DisplayMsg("[WebSocket] 等待玩家加入");
         }
@@ -233,6 +238,7 @@ namespace ChineseChess.Presenters
             }
             _form.StartStopServerBtn.Enabled = false;
             _form.URL.Enabled = false;
+            _form.SendChatBtn.Enabled = true;
             //PlaceButtons();
         }
 

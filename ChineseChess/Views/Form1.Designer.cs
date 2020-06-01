@@ -163,6 +163,7 @@
             // 
             // SendChatBtn
             // 
+            this.SendChatBtn.Enabled = false;
             this.SendChatBtn.Location = new System.Drawing.Point(849, 568);
             this.SendChatBtn.Name = "SendChatBtn";
             this.SendChatBtn.Size = new System.Drawing.Size(54, 21);
