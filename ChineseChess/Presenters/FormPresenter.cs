@@ -162,7 +162,7 @@ namespace ChineseChess.Presenters
                 var nickName = _form.NickName.Text == "" ? "Player1" : _form.NickName.Text;
 
                 if (_webSocketServer.WebSocketServices["/MessageReciever"] == null)
-                    _webSocketServer.AddWebSocketService<MessageReceiver>("/MessageReciever");
+                    _webSocketServer.AddWebSocketService<MessageReceiver>("/MessageReciever", (receiver) => { receiver.SetupPresenter(this); });
 
                 _messageSender = new ServerMessageSender(_webSocketServer);
 
