@@ -159,7 +159,7 @@ namespace ChineseChess.Presenters
         {
             try
             {
-                var nickName = _form.NickName.Text == "" ? "Player1" : _form.NickName.Text;
+                ServerNickName = _form.NickName.Text == "" ? "Player1" : _form.NickName.Text;
 
                 if (_webSocketServer.WebSocketServices["/MessageReciever"] == null)
                     _webSocketServer.AddWebSocketService<MessageReceiver>("/MessageReciever", (receiver) => { receiver.SetupPresenter(this); });
@@ -170,7 +170,7 @@ namespace ChineseChess.Presenters
 
                 if (_battleField == null)
                 {
-                    _battleField = new ServerBattleField(this, nickName);
+                    _battleField = new ServerBattleField(this, ServerNickName);
                     ChessboardDisplayer.LoadBattleField(_battleField);
                 }
                 
@@ -221,11 +221,11 @@ namespace ChineseChess.Presenters
             var url = string.Format("ws://{0}:30678/MessageReciever", _form.URL.Text);
             try
             {
-                var nickName = _form.NickName.Text == "" ? "Player2" : _form.NickName.Text;
+                ClientNickName = _form.NickName.Text == "" ? "Player2" : _form.NickName.Text;
                 _webSocketClient = new WebSocketClient(this, url);
                 _messageSender = new ClientMessageSender(_webSocketClient);
                 _webSocketClient.WSClient.Connect();
-                _battleField = new ClientBattleField(this, nickName);
+                _battleField = new ClientBattleField(this, ClientNickName);
                 ChessboardDisplayer.LoadBattleField(_battleField);
                 _battleField.CreateBattleField();
                 Task t = new Task(_webSocketClient.KeepAlive);
