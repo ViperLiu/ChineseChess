@@ -1,4 +1,4 @@
-using ChineseChess.Presenters;
+﻿using ChineseChess.Presenters;
 using System;
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -32,9 +32,9 @@ namespace ChineseChess
 
         protected override void OnOpen()
         {
-            //var msg2 = string.Format("已加入 {0} 的遊戲", ServerBattleField.ServerNickName);
-            //var message2 = new Message(Message.Type.WebSocket, msg2);
-            //MessageSender.Send(Message.Serialize(message2));
+            var msg2 = string.Format("已加入 {0} 的遊戲", _presenter.ServerNickName);
+            var message2 = new Message(Message.Type.WebSocket, msg2);
+            _presenter.SendMessage(Message.Serialize(message2));
         }
 
         protected override void OnClose(CloseEventArgs e)
