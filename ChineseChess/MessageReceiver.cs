@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChineseChess.Presenters;
+using System;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -6,7 +7,17 @@ namespace ChineseChess
 {
     public class MessageReceiver : WebSocketBehavior
     {
-        
+        private FormPresenter _presenter;
+
+        public MessageReceiver()
+        {
+        }
+
+        public MessageReceiver(FormPresenter presenter)
+        {
+            _presenter = presenter;
+        }
+
         protected override void OnMessage(MessageEventArgs e)
         {
             if (e.Data == null || e.Data == "")
