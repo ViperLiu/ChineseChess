@@ -9,11 +9,8 @@ namespace ChineseChess
     {
         private FormPresenter _presenter;
 
-        public MessageReceiver()
-        {
-        }
 
-        public MessageReceiver(FormPresenter presenter)
+        public void SetupPresenter(FormPresenter presenter)
         {
             _presenter = presenter;
         }
