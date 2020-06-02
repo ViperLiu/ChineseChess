@@ -1,4 +1,4 @@
-﻿using ChineseChess.Presenters;
+using ChineseChess.Presenters;
 using System;
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -22,7 +22,7 @@ namespace ChineseChess
 
             Message msg = Message.Deserialize(e.Data);
             Console.WriteLine("Server OnMessage : " + e.Data);
-            //Form1.MessageQueue.Enqueue(msg);
+            _presenter.MessageQueue.Enqueue(msg);
         }
 
         protected override void OnError(ErrorEventArgs e)
