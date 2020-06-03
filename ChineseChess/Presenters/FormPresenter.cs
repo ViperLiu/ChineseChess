@@ -102,7 +102,10 @@ namespace ChineseChess.Presenters
             }
             else if (caseAttackEnemyToken)
             {
-                _battleField.MoveToken(_battleField.CurrentActivatedToken.Coordinate, token.Coordinate);
+                var from = _battleField.CurrentActivatedToken.Coordinate;
+                var to = token.Coordinate;
+                _battleField.MoveToken(from, to);
+                NotifyTokenMoved(new MoveInfo(from, to));
                 //token.BecomeTarget();
                 Console.WriteLine("attack!");
             }
@@ -131,6 +134,7 @@ namespace ChineseChess.Presenters
             var to = _battleField.ConvertPictureboxPointToCoordinate(x, y);
 
             _battleField.MoveToken(from, to);
+            NotifyTokenMoved(new MoveInfo(from, to));
         }
 
         public void StartOrStopServer()
