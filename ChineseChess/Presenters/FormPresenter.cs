@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -267,6 +267,12 @@ namespace ChineseChess.Presenters
         internal void SendMessage(string msg)
         {
             _messageSender.Send(msg);
+        }
+
+        private void NotifyTokenMoved(MoveInfo moveInfo)
+        {
+            var message = new Message(moveInfo);
+            SendMessage(Message.Serialize(message));
         }
     }
 }
