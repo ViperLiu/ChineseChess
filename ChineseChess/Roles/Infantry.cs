@@ -43,8 +43,7 @@ namespace ChineseChess.Roles
             var currentY = CurrentCoordinate.Y;
             if(Faction == Factions.Red)
             {
-                if (currentX < 5)
-                    _isCrossedRiver = true;
+                _isCrossedRiver = currentX < 5 ? true : false;
                 if (!_isCrossedRiver)
                     available.Add(new BattleFieldCoordinate(currentX - 1, currentY));
                 else
@@ -57,8 +56,7 @@ namespace ChineseChess.Roles
             }
             else
             {
-                if (currentX > 4)
-                    _isCrossedRiver = true;
+                _isCrossedRiver = currentX > 4 ? true : false;
                 if (!_isCrossedRiver)
                     available.Add(new BattleFieldCoordinate(currentX + 1, currentY));
                 else
