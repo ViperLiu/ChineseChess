@@ -92,6 +92,21 @@ namespace ChineseChess.Presenters
                 _battleField.GamePhase.CurrentPhase == GamePhase.Phase.WaitingForSelect &&
                 _battleField.GamePhase.Turn != token.Role.Faction;
 
+            var caseNotServerTurn =
+                _battleField.GamePhase.CurrentPhase == GamePhase.Phase.WaitingForSelect &&
+                _battleField.GamePhase.Turn != Factions.Red &&
+                _battleField is ServerBattleField;
+
+            var caseNotClientTurn =
+                _battleField.GamePhase.CurrentPhase == GamePhase.Phase.WaitingForSelect &&
+                _battleField.GamePhase.Turn != Factions.Black &&
+                _battleField is ClientBattleField;
+
+            if (caseNotYourTurn || caseNotServerTurn || caseNotClientTurn)
+            {
+                return;
+            }
+
             if (caseActivatedToken || caseChangeActiveatedToken)
             {
                 token.Activate();
@@ -108,10 +123,6 @@ namespace ChineseChess.Presenters
                 NotifyTokenMoved(new MoveInfo(from, to));
                 //token.BecomeTarget();
                 Console.WriteLine("attack!");
-            }
-            else if (caseNotYourTurn)
-            {
-                return;
             }
             else
             {
