@@ -50,8 +50,10 @@ namespace ChineseChess.Roles
                 {
                     if(CanMoveAnyForward())
                         available.Add(new BattleFieldCoordinate(currentX - 1, currentY));
-                    available.Add(new BattleFieldCoordinate(currentX, currentY - 1));
-                    available.Add(new BattleFieldCoordinate(currentX, currentY + 1));
+                    if(BattleFieldCoordinate.IsLegal(currentX, currentY - 1))
+                        available.Add(new BattleFieldCoordinate(currentX, currentY - 1));
+                    if (BattleFieldCoordinate.IsLegal(currentX, currentY + 1))
+                        available.Add(new BattleFieldCoordinate(currentX, currentY + 1));
                 }
             }
             else
@@ -63,8 +65,10 @@ namespace ChineseChess.Roles
                 {
                     if (CanMoveAnyForward())
                         available.Add(new BattleFieldCoordinate(currentX + 1, currentY));
-                    available.Add(new BattleFieldCoordinate(currentX, currentY - 1));
-                    available.Add(new BattleFieldCoordinate(currentX, currentY + 1));
+                    if (BattleFieldCoordinate.IsLegal(currentX, currentY - 1))
+                        available.Add(new BattleFieldCoordinate(currentX, currentY - 1));
+                    if (BattleFieldCoordinate.IsLegal(currentX, currentY + 1))
+                        available.Add(new BattleFieldCoordinate(currentX, currentY + 1));
                 }
             }
 
