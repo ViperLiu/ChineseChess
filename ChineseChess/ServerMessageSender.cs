@@ -20,6 +20,8 @@ namespace ChineseChess
         {
             var sessions = _webSocketServer.WebSocketServices["/MessageReciever"].Sessions;
             var id = sessions.IDs.ToList();
+            if (id.Count == 0)
+                return;
             sessions.SendTo(message, id.First());
         }
     }

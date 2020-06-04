@@ -163,6 +163,7 @@
             // 
             // SendChatBtn
             // 
+            this.SendChatBtn.Enabled = false;
             this.SendChatBtn.Location = new System.Drawing.Point(849, 568);
             this.SendChatBtn.Name = "SendChatBtn";
             this.SendChatBtn.Size = new System.Drawing.Size(54, 21);
@@ -185,7 +186,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.ShowIcon = false;
-            this.Text = "數聯首家線上象棋上線啦";
+            this.Text = "XX首家線上象棋上線啦";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);

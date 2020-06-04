@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -92,6 +92,21 @@ namespace ChineseChess.Presenters
                 _battleField.GamePhase.CurrentPhase == GamePhase.Phase.WaitingForSelect &&
                 _battleField.GamePhase.Turn != token.Role.Faction;
 
+            var caseNotServerTurn =
+                _battleField.GamePhase.CurrentPhase == GamePhase.Phase.WaitingForSelect &&
+                _battleField.GamePhase.Turn != Factions.Red &&
+                _battleField is ServerBattleField;
+
+            var caseNotClientTurn =
+                _battleField.GamePhase.CurrentPhase == GamePhase.Phase.WaitingForSelect &&
+                _battleField.GamePhase.Turn != Factions.Black &&
+                _battleField is ClientBattleField;
+
+            if (caseNotYourTurn || caseNotServerTurn || caseNotClientTurn)
+            {
+                return;
+            }
+
             if (caseActivatedToken || caseChangeActiveatedToken)
             {
                 token.Activate();
@@ -102,13 +117,12 @@ namespace ChineseChess.Presenters
             }
             else if (caseAttackEnemyToken)
             {
-                _battleField.MoveToken(_battleField.CurrentActivatedToken.Coordinate, token.Coordinate);
+                var from = _battleField.CurrentActivatedToken.Coordinate;
+                var to = token.Coordinate;
+                _battleField.MoveToken(from, to);
+                NotifyTokenMoved(new MoveInfo(from, to));
                 //token.BecomeTarget();
                 Console.WriteLine("attack!");
-            }
-            else if (caseNotYourTurn)
-            {
-                return;
             }
             else
             {
@@ -118,6 +132,9 @@ namespace ChineseChess.Presenters
 
         internal void OnChessboardClicked(int x, int y)
         {
+            if (_battleField == null)
+                return;
+
             if (_battleField.GamePhase.CurrentPhase != GamePhase.Phase.WaitingForMove)
                 return;
             
@@ -128,6 +145,7 @@ namespace ChineseChess.Presenters
             var to = _battleField.ConvertPictureboxPointToCoordinate(x, y);
 
             _battleField.MoveToken(from, to);
+            NotifyTokenMoved(new MoveInfo(from, to));
         }
 
         public void StartOrStopServer()
@@ -148,6 +166,7 @@ namespace ChineseChess.Presenters
             _form.ConnectToServerBtn.Enabled = true;
             _form.URL.Enabled = true;
             _form.NickName.Enabled = true;
+            _form.SendChatBtn.Enabled = false;
             DisplayMsg("[WebSocket] 伺服器已關閉");
         }
 
@@ -155,10 +174,10 @@ namespace ChineseChess.Presenters
         {
             try
             {
-                var nickName = _form.NickName.Text == "" ? "Player1" : _form.NickName.Text;
+                ServerNickName = _form.NickName.Text == "" ? "Player1" : _form.NickName.Text;
 
                 if (_webSocketServer.WebSocketServices["/MessageReciever"] == null)
-                    _webSocketServer.AddWebSocketService<MessageReceiver>("/MessageReciever");
+                    _webSocketServer.AddWebSocketService<MessageReceiver>("/MessageReciever", (receiver) => { receiver.SetupPresenter(this); });
 
                 _messageSender = new ServerMessageSender(_webSocketServer);
 
@@ -166,7 +185,7 @@ namespace ChineseChess.Presenters
 
                 if (_battleField == null)
                 {
-                    _battleField = new ServerBattleField(this, nickName);
+                    _battleField = new ServerBattleField(this, ServerNickName);
                     ChessboardDisplayer.LoadBattleField(_battleField);
                 }
                 
@@ -186,6 +205,7 @@ namespace ChineseChess.Presenters
             _form.ConnectToServerBtn.Enabled = false;
             _form.URL.Enabled = false;
             _form.NickName.Enabled = false;
+            _form.SendChatBtn.Enabled = true;
             DisplayMsg("[WebSocket] 已啟動伺服器");
             DisplayMsg("[WebSocket] 等待玩家加入");
         }
@@ -216,11 +236,11 @@ namespace ChineseChess.Presenters
             var url = string.Format("ws://{0}:30678/MessageReciever", _form.URL.Text);
             try
             {
-                var nickName = _form.NickName.Text == "" ? "Player2" : _form.NickName.Text;
+                ClientNickName = _form.NickName.Text == "" ? "Player2" : _form.NickName.Text;
                 _webSocketClient = new WebSocketClient(this, url);
                 _messageSender = new ClientMessageSender(_webSocketClient);
                 _webSocketClient.WSClient.Connect();
-                _battleField = new ClientBattleField(this, nickName);
+                _battleField = new ClientBattleField(this, ClientNickName);
                 ChessboardDisplayer.LoadBattleField(_battleField);
                 _battleField.CreateBattleField();
                 Task t = new Task(_webSocketClient.KeepAlive);
@@ -233,6 +253,7 @@ namespace ChineseChess.Presenters
             }
             _form.StartStopServerBtn.Enabled = false;
             _form.URL.Enabled = false;
+            _form.SendChatBtn.Enabled = true;
             //PlaceButtons();
         }
 
@@ -261,6 +282,12 @@ namespace ChineseChess.Presenters
         internal void SendMessage(string msg)
         {
             _messageSender.Send(msg);
+        }
+
+        private void NotifyTokenMoved(MoveInfo moveInfo)
+        {
+            var message = new Message(moveInfo);
+            SendMessage(Message.Serialize(message));
         }
     }
 }

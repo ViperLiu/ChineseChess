@@ -43,30 +43,32 @@ namespace ChineseChess.Roles
             var currentY = CurrentCoordinate.Y;
             if(Faction == Factions.Red)
             {
-                if (currentX < 5)
-                    _isCrossedRiver = true;
+                _isCrossedRiver = currentX < 5 ? true : false;
                 if (!_isCrossedRiver)
                     available.Add(new BattleFieldCoordinate(currentX - 1, currentY));
                 else
                 {
                     if(CanMoveAnyForward())
                         available.Add(new BattleFieldCoordinate(currentX - 1, currentY));
-                    available.Add(new BattleFieldCoordinate(currentX, currentY - 1));
-                    available.Add(new BattleFieldCoordinate(currentX, currentY + 1));
+                    if(BattleFieldCoordinate.IsLegal(currentX, currentY - 1))
+                        available.Add(new BattleFieldCoordinate(currentX, currentY - 1));
+                    if (BattleFieldCoordinate.IsLegal(currentX, currentY + 1))
+                        available.Add(new BattleFieldCoordinate(currentX, currentY + 1));
                 }
             }
             else
             {
-                if (currentX > 4)
-                    _isCrossedRiver = true;
+                _isCrossedRiver = currentX > 4 ? true : false;
                 if (!_isCrossedRiver)
                     available.Add(new BattleFieldCoordinate(currentX + 1, currentY));
                 else
                 {
                     if (CanMoveAnyForward())
                         available.Add(new BattleFieldCoordinate(currentX + 1, currentY));
-                    available.Add(new BattleFieldCoordinate(currentX, currentY - 1));
-                    available.Add(new BattleFieldCoordinate(currentX, currentY + 1));
+                    if (BattleFieldCoordinate.IsLegal(currentX, currentY - 1))
+                        available.Add(new BattleFieldCoordinate(currentX, currentY - 1));
+                    if (BattleFieldCoordinate.IsLegal(currentX, currentY + 1))
+                        available.Add(new BattleFieldCoordinate(currentX, currentY + 1));
                 }
             }
 
