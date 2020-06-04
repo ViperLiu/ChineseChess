@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2CA6FDEA-AB3A-4480-A00C-00DB5A01486F}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>ChineseChess</RootNamespace>
     <AssemblyName>ChineseChess</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
